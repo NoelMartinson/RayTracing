@@ -4,8 +4,8 @@
 
 #include "Renderer.h"
 #include "Framebuffer.h"
-
-#include <iostream>
+#include "Camera.h"	
+#include "Scene.h"
 
 int main() {
 	constexpr int SCREEN_WIDTH = 800;
@@ -17,6 +17,13 @@ int main() {
 	renderer.CreateWindow("Ray Tracer", SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Framebuffer framebuffer(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	float aspectRatio = static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT);
+	Camera camera(70.0f, aspectRatio);
+	camera.SetView({ 0, 0, 5 }, { 0, 0, 0 });
+
+	Scene scene; // after camera creation/initialization	
+	scene.SetSky({ 1.0f, 0.5f, 0.0f }, { 0.0f, 0.0f, 0.5f });
 
 	SDL_Event event;
 	bool quit = false;
@@ -33,15 +40,15 @@ int main() {
 			}
 		}
 
-		// draw to frame buffer
-		framebuffer.Clear({ 0, 0, 0, 255 });
-		for (int i = 0; i < 300; i++) framebuffer.DrawPoint(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT, { 255, 255, 255, 255 });
+		// remove previous "static" code and replace with this
+		scene.Render(framebuffer, camera);
 
 		// update frame buffer, copy buffer pixels to texture
 		framebuffer.Update();
 
 		// copy frame buffer texture to renderer to display
 		renderer.CopyFramebuffer(framebuffer);
-		renderer.Show();
+		renderer.Show();	
 	}
+	return 0;
 }
