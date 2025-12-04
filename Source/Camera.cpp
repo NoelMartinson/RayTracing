@@ -8,9 +8,9 @@ void Camera::SetView(const glm::vec3& eye, const glm::vec3& target, const glm::v
 	//this->right = normalized vector from the cross product of the forward and up vector
 	//this->up = normalized vector from the cross product of the right and forward vector
 
-	this->forward = glm::normalize(target - eye);
-	this->right = glm::normalize(glm::cross(this->forward, this->up));
-	this->up = glm::normalize(glm::cross(this->right, this->forward));
+	forward = glm::normalize(target - eye);
+	right = glm::normalize(glm::cross(up, forward));
+	this->up = glm::normalize(glm::cross(right, forward));
 
 	CalculateViewPlane();
 }
